@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+	
+		<!-- 
+		#hibernate.dialect org.hibernate.dialect.MySQLDialect
+		#hibernate.dialect org.hibernate.dialect.MySQLInnoDBDialect
+		#hibernate.dialect org.hibernate.dialect.MySQLMyISAMDialect
+		#hibernate.connection.driver_class com.mysql.jdbc.Driver
+		#hibernate.connection.url jdbc:mysql:///test
+		#hibernate.connection.username gavin
+		#hibernate.connection.password
+		 -->
+		 <!-- 数据库驱动 -->
+		<property name="hibernate.connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+		 <!-- 数据库url -->
+		<property name="hibernate.connection.url">
+			jdbc:mysql://127.0.0.1:3306/hibernate?useUnicode=true&amp;characterEncoding=UTF-8
+		</property>
+		 <!-- 数据库连接用户名 -->
+		<property name="hibernate.connection.username">root</property>
+		 <!-- 数据库连接密码 -->
+		<property name="hibernate.connection.password">123456</property>
+		<!-- 数据库方言
+			不同的数据库中,sql语法略有区别. 指定方言可以让hibernate框架在生成sql语句时.针对数据库的方言生成.
+			sql99标准: DDL 定义语言  库表的增删改查
+					  DCL 控制语言  事务 权限
+					  DML 操纵语言  增删改查
+			注意: MYSQL在选择方言时,请选择最短的方言.
+			org.hibernate.dialect.MySQLDialect
+			org.hibernate.dialect.MySQL5Dialect
+		 -->
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQL5Dialect
+		</property>
+		
+		
+		<!-- #hibernate.show_sql true 
+			 #hibernate.format_sql true
+		-->
+		<!-- 将hibernate生成的sql语句打印到控制台 -->
+		<property name="hibernate.show_sql">true</property>
+		<!-- 将hibernate生成的sql语句格式化(语法缩进) -->
+		<property name="hibernate.format_sql">true</property>
+		<!-- 
+		## auto schema export  自动导出表结构. 自动建表
+		#hibernate.hbm2ddl.auto create		自动建表.每次框架运行都会创建新的表.以前表将会被覆盖,表数据会丢失.(开发环境中测试使用)
+		#hibernate.hbm2ddl.auto create-drop 自动建表.每次框架运行结束都会将所有表删除.(开发环境中测试使用)
+		#hibernate.hbm2ddl.auto update(推荐使用) 自动生成表.如果已经存在不会再生成.如果表有变动.自动更新表(不会删除任何数据).
+		#hibernate.hbm2ddl.auto validate	校验.不自动生成表.每次启动会校验数据库中表是否正确.校验失败.
+		 -->
+		<property name="hibernate.hbm2ddl.auto">update</property>
+
+		<!-- 指定hibernate操作数据库时的隔离级别
+			#hibernate.connection.isolation 1|2|4|8
+			0001	1	读未提交
+			0010	2	读已提交
+			0100	4	可重复读（mysql默认隔离级别）
+			1000	8	串行化
+		 -->
+		<property name="hibernate.connection.isolation">4</property>
+
+		<!-- 在dao层操作数据库用到session对象,在service层控制事务也是用session对象.要确保dao层和service层使用的是同一个session对象.
+		 	开发时只需要调拥SessionFactory对象的getCurrentSession()方法即可获得当前线程绑定的session对象。要想调用这个方法的，必须配置下面这个，
+		 	将session与线程绑定。
+		 	注意：通过getCurrentSession()方法获得的session对象，当事务提交时session会自动关闭。不要手动去close()，否则会抛异常，提示session已关闭。
+		 -->
+		<!-- 指定session与当前线程绑定 -->
+		<property name="hibernate.current_session_context_class">thread</property>
+
+		<!-- 引入orm元数据
+			路径书写: 填写src下的路径
+		 -->
+		<mapping resource="com/commons/domain/Customer.hbm.xml" />
+		<mapping resource="com/commons/domain/LinkMan.hbm.xml" />
+		<mapping resource="com/commons/domain/Role.hbm.xml" />
+		<mapping resource="com/commons/domain/User.hbm.xml" />
+
+	</session-factory>
+</hibernate-configuration>
